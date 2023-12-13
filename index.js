@@ -22,7 +22,7 @@ app.use(
       "https://dape-beehub-va-api.onrender.com",
       "https://beehubvas.onrender.com",
       "https://dape-beehub-va.onrender.com",
-      "https://beehubvas.com/",
+      "https://beehubvas.com",
     ],
     methods: ["GET", "POST"],
     credentials: true,
