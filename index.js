@@ -19,8 +19,9 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://beehubvas.com",
+      "https://dape-beehub-va-api.onrender.com",
       "https://beehubvas.onrender.com",
+      "https://dape-beehub-va.onrender.com",
     ],
     methods: ["GET", "POST"],
     credentials: true,
@@ -455,6 +456,6 @@ app.get("/getArchiveUsers", async (req, res) => {
 
 app.get("/viewPDF", (req, res) => {
   const pdfFilename = req.query.filename;
-  const pdfUrl = `https://beehubvas.com/resumes/${pdfFilename}`;
+  const pdfUrl = `https://dape-beehub-va-api.onrender.com/resumes/${pdfFilename}`;
   res.status(200).send({ url: pdfUrl });
 });
