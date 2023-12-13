@@ -14,6 +14,7 @@ const UserSchema = new mongoose.Schema({
   password: String,
   selectedValues: Object,
   role: String,
+  archive: { type: Boolean, default: false },
   verified: { type: Boolean, default: false },
 });
 

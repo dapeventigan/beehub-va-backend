@@ -1,8 +1,18 @@
 const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
 require("dotenv").config();
 
-module.exports = async (email,subject, message) => {
+const oAuth2Client = new google.auth.OAuth2(
+  process.env.NODEMAIL_CLIENTID,
+  process.env.NODEMAIL_CLIENTSECRET,
+  process.env.REDIRECT_GMAILURI
+);
+
+oAuth2Client.setCredentials({ refresh_token: process.env.GMAIL_REFRESHTOKEN });
+
+module.exports = async (email, subject, message) => {
   try {
+    const ACCESS_TOKEN = await oAuth2Client.getAccessToken();
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -11,7 +21,10 @@ module.exports = async (email,subject, message) => {
         clientId: process.env.NODEMAIL_CLIENTID,
         clientSecret: process.env.NODEMAIL_CLIENTSECRET,
         refreshToken: process.env.GMAIL_REFRESHTOKEN,
-        accessToken: process.env.GMAIL_ACCESSTOKEN,
+        accessToken: ACCESS_TOKEN,
+      },
+      tls: {
+        rejectUnauthorized: true,
       },
     });
 

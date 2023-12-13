@@ -17,7 +17,11 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://beehubvas.com", "https://beehubvas.onrender.com"],
+    origin: [
+      "http://localhost:3000",
+      "https://beehubvas.com",
+      "https://beehubvas.onrender.com",
+    ],
     methods: ["GET", "POST"],
     credentials: true,
   })
@@ -194,9 +198,11 @@ app.post("/contactMessage", async (req, res) => {
   const email = req.body.email;
   const message = req.body.message;
   const subject = req.body.subject;
+  const id = req.body.id;
 
   await contactEmail(email, subject, message);
-});
+  await UserModel.updateOne({ _id: id }, { archive: true });
+}); 
 
 //GET
 
@@ -416,7 +422,7 @@ app.get("/getSpecificUser", async (req, res) => {
 app.get("/getApplyUsers", async (req, res) => {
   const userRole = "applyUser";
 
-  await UserModel.find({ role: userRole })
+  await UserModel.find({ role: userRole, archive: false })
     .then((data) => {
       res.json(data);
     })
@@ -428,7 +434,17 @@ app.get("/getApplyUsers", async (req, res) => {
 app.get("/getJoinUsers", async (req, res) => {
   const userRole = "joinUser";
 
-  await UserModel.find({ role: userRole })
+  await UserModel.find({ role: userRole, archive: false })
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((error) => {
+      res.send({ message: error });
+    });
+});
+
+app.get("/getArchiveUsers", async (req, res) => {
+  await UserModel.find({ archive: true })
     .then((data) => {
       res.json(data);
     })
@@ -439,6 +455,6 @@ app.get("/getJoinUsers", async (req, res) => {
 
 app.get("/viewPDF", (req, res) => {
   const pdfFilename = req.query.filename;
-  const pdfUrl = `http://localhost:3001/resumes/${pdfFilename}`;
+  const pdfUrl = `https://beehubvas.com/resumes/${pdfFilename}`;
   res.status(200).send({ url: pdfUrl });
 });
