@@ -85,7 +85,7 @@ app.post("/applyRegister", upload.single("pdfFile"), async (req, res) => {
     userId: user._id,
     uniqueString: crypto.randomBytes(32).toString("hex"),
   }).save();
-  const urlVerify = `http://localhost:3000/verify/${user._id}/${userVerify.uniqueString}`;
+  const urlVerify = `https://beehubvas.com/verify/${user._id}/${userVerify.uniqueString}`;
   await verifyEmail(req.body.email, urlVerify);
 
   res.status(200).send({
@@ -114,7 +114,7 @@ app.post("/joinRegister", upload.single("pdfFile"), async (req, res) => {
     userId: user._id,
     uniqueString: crypto.randomBytes(32).toString("hex"),
   }).save();
-  const urlVerify = `http://localhost:3000/verify/${user._id}/${userVerify.uniqueString}`;
+  const urlVerify = `https://beehubvas.com/verify/${user._id}/${userVerify.uniqueString}`;
   await verifyEmail(req.body.email, urlVerify);
 
   res.status(200).send({
@@ -141,7 +141,7 @@ app.post("/login", async (req, res) => {
           userId: user._id,
           uniqueString: crypto.randomBytes(32).toString("hex"),
         }).save();
-        const urlVerify = `http://localhost:3000/verify/${user._id}/${userVerify.uniqueString}`;
+        const urlVerify = `https://beehubvas.com/verify/${user._id}/${userVerify.uniqueString}`;
         await verifyEmail(req.body.email, urlVerify);
       }
 
@@ -182,7 +182,7 @@ app.post("/getEmail", async (req, res) => {
       userId: user._id,
       uniqueString: crypto.randomBytes(32).toString("hex"),
     }).save();
-    const urlVerify = `http://localhost:3000/reset/${user._id}/${userVerify.uniqueString}`;
+    const urlVerify = `https://beehubvas.com/reset/${user._id}/${userVerify.uniqueString}`;
     await resetPassword(req.body.email, urlVerify);
   } else {
     res.status(400).send({
