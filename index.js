@@ -33,13 +33,6 @@ console.log("__dirname:", __dirname);
 
 app.use(cookieParser());
 app.use("/resumes", express.static(path.join(__dirname, "resumes")));
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'build')));
-
-// Handle any requests that don't match the ones above
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
 
 mongoose.connect(process.env.DB, {
   useNewUrlParser: true,
