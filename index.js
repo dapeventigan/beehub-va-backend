@@ -229,6 +229,10 @@ app.get("/verify/:id/:token", async (req, res) => {
     const token = await VerifyUserModel.findOne({
       uniqueString: req.params.token,
     });
+    res.status(690);
+    res.send({
+      message: "Valid Link",
+    });
 
     if (!token) {
       console.log("Invalid token");
