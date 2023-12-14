@@ -28,6 +28,9 @@ app.use(
     credentials: true,
   })
 );
+
+console.log("__dirname:", __dirname);
+
 app.use(cookieParser());
 app.use("/resumes", express.static(path.join(__dirname, "resumes")));
 // Serve static files from the React app
