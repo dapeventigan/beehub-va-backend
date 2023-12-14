@@ -155,7 +155,12 @@ app.post("/login", async (req, res) => {
           expiresIn: "1d",
         }
       );
-      res.cookie("token", token);
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: true, // Set to true if your application is served over HTTPS
+        sameSite: "None", // For cross-site cookies
+        expiresIn: "1d", // Set the cookie expiration time as required
+      });
 
       if (res.status(201)) {
         return res.json({ status: "ok", role: user.role, userID: user._id });
