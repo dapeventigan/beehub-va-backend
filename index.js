@@ -24,10 +24,10 @@ app.use(
       "https://dape-beehub-va.onrender.com",
       "https://beehubvas.com",
     ],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type,Authorization',
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: "Content-Type,Authorization",
     credentials: true,
-    optionsSuccessStatus: 200
+    optionsSuccessStatus: 200,
   })
 );
 
@@ -224,18 +224,12 @@ app.get("/verify/:id/:token", async (req, res) => {
   const userId = await VerifyUserModel.findOne({ userId: req.params.id });
 
   if (!userId) {
-    res.status(200);
-    res.send({
-      message: "Link expired or Invalid token. Please try again by logging in.",
-    });
+    res.send({ message: "Link expired or Invalid token. Please try again by logging in." });
   } else {
     const token = await VerifyUserModel.findOne({
       uniqueString: req.params.token,
     });
-    res.status(690);
-    res.send({
-      message: "Valid Link",
-    });
+    res.send({ message: "Valid Link" });
 
     if (!token) {
       console.log("Invalid token");
