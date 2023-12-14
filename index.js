@@ -218,6 +218,7 @@ app.post("/contactMessage", async (req, res) => {
 //GET
 
 app.get("/verify/:id/:token", async (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
   const userId = await VerifyUserModel.findOne({ userId: req.params.id });
 
   if (!userId) {
