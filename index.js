@@ -24,8 +24,10 @@ app.use(
       "https://dape-beehub-va.onrender.com",
       "https://beehubvas.com",
     ],
-    methods: ["GET", "POST"],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type,Authorization',
     credentials: true,
+    optionsSuccessStatus: 200
   })
 );
 
