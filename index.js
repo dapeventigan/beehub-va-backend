@@ -176,7 +176,7 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/getEmail", async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://beehubvas.com');
+  res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
   let user = await UserModel.findOne({ email: req.body.email });
   if (user) {
     const userVerify = await new VerifyUserModel({
@@ -253,7 +253,7 @@ app.get("/reset/:id/:token", async (req, res) => {
     const token = await VerifyUserModel.findOne({
       uniqueString: req.params.token,
     });
-
+    res.send({ message: "yeah" });
     if (!token) {
       console.log("Not Worked 2");
       console.log("Invalid token");
