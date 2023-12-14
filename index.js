@@ -31,12 +31,7 @@ app.use(
 app.use(cookieParser());
 app.use("/resumes", express.static(path.join(__dirname, "resumes")));
 // Serve static files from the build directory (assuming React build files are in 'build' directory)
-// app.use(express.static(path.join(__dirname, 'build')));
-app.use(express.static(path.join(__dirname, "client/build")));
-// // Catch-all route to serve React app
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'build', 'App.jsx'));
-// });
+app.use(express.static(path.join(__dirname, "build")));
 
 mongoose.connect(process.env.DB, {
   useNewUrlParser: true,
