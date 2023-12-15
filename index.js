@@ -171,7 +171,7 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/logout", async (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("token", { secure: true, httpOnly: true });
   return res.redirect("/verifylogin");
 });
 
