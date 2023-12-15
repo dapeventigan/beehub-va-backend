@@ -17,7 +17,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: ["https://beehubvas.com", "http://localhost:3000"],
+    origin: "https://beehubvas.com",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: "Content-Type,Authorization",
     credentials: true,
@@ -154,6 +154,7 @@ app.post("/login", async (req, res) => {
       res.cookie("token", token, {
         httpOnly: true,
         secure: true, // Set to true if your application is served over HTTPS
+        sameSite: "None",
         maxAge: 86400000,
       });
 
