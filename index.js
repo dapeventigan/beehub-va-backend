@@ -171,7 +171,12 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/logout", async (req, res) => {
-  res.clearCookie("token", { secure: true, httpOnly: true });
+  res.clearCookie("token", {
+    secure: true,
+    httpOnly: true,
+    domain: "https://beehubvas.com",
+    path: "/",
+  });
   return res.redirect("/verifylogin");
 });
 
