@@ -17,21 +17,13 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://beehubvas.com",
+    origin: ["https://beehubvas.com", "http://localhost:3000"],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: "Content-Type,Authorization",
     credentials: true,
     optionsSuccessStatus: 200,
   })
 );
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
-  res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  next();
-})
-
-console.log("__dirname:", __dirname);
 
 app.use(cookieParser());
 app.use("/resumes", express.static(path.join(__dirname, "resumes")));
@@ -163,7 +155,6 @@ app.post("/login", async (req, res) => {
         httpOnly: true,
         secure: true, // Set to true if your application is served over HTTPS
         maxAge: 86400000,
-        signed: true, // Set the cookie expiration time as required
       });
 
       if (res.status(201)) {
@@ -180,7 +171,7 @@ app.post("/login", async (req, res) => {
 
 app.post("/logout", async (req, res) => {
   res.clearCookie("token");
-  return res.redirect("/");
+  return res.redirect("/verifylogin");
 });
 
 app.post("/getEmail", async (req, res) => {
@@ -253,22 +244,17 @@ app.get("/verify/:id/:token", async (req, res) => {
 
 app.get("/reset/:id/:token", async (req, res) => {
   const userId = await VerifyUserModel.findOne({ userId: req.params.id });
-  console.log("Worked 1");
   if (!userId) {
-    console.log("Not worked 1");
     res.send({ message: "nah" });
   } else {
-    console.log("Worked 2");
     const token = await VerifyUserModel.findOne({
       uniqueString: req.params.token,
     });
     res.send({ message: "yeah" });
     if (!token) {
-      console.log("Not Worked 2");
       console.log("Invalid token");
     } else {
       await VerifyUserModel.findByIdAndRemove(token._id);
-      console.log("Worked 3");
     }
   }
 });
