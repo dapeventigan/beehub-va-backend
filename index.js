@@ -174,7 +174,7 @@ app.post("/logout", async (req, res) => {
   res.clearCookie("token", {
     secure: true,
     httpOnly: true,
-    domain: "dape-beehub-va-api.onrender.com",
+    domain: "https://dape-beehub-va-api.onrender.com",
     path: "/",
   });
   return res.redirect("/verifylogin");
