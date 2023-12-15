@@ -17,13 +17,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://dape-beehub-va-api.onrender.com",
-      "https://beehubvas.onrender.com",
-      "https://dape-beehub-va.onrender.com",
-      "https://beehubvas.com",
-    ],
+    origin: "https://beehubvas.com",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: "Content-Type,Authorization",
     credentials: true,
