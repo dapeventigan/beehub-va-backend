@@ -158,11 +158,12 @@ app.post("/login", async (req, res) => {
           expiresIn: "1d",
         }
       );
+
       res.cookie("token", token, {
         httpOnly: true,
         secure: true, // Set to true if your application is served over HTTPS
-        sameSite: "None", // For cross-site cookies
-        expiresIn: "1d", // Set the cookie expiration time as required
+        maxAge: 86400000,
+        signed: true, // Set the cookie expiration time as required
       });
 
       if (res.status(201)) {
@@ -175,6 +176,11 @@ app.post("/login", async (req, res) => {
   return res.status(400).send({
     message: `Invalid Password!`,
   });
+});
+
+app.post("/logout", async (req, res) => {
+  res.clearCookie("token");
+  return res.redirect("/");
 });
 
 app.post("/getEmail", async (req, res) => {
@@ -224,7 +230,9 @@ app.get("/verify/:id/:token", async (req, res) => {
   const userId = await VerifyUserModel.findOne({ userId: req.params.id });
 
   if (!userId) {
-    res.send({ message: "Link expired or Invalid token. Please try again by logging in." });
+    res.send({
+      message: "Link expired or Invalid token. Please try again by logging in.",
+    });
   } else {
     const token = await VerifyUserModel.findOne({
       uniqueString: req.params.token,
