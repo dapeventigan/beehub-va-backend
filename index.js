@@ -153,8 +153,9 @@ app.post("/login", async (req, res) => {
 
       res.cookie("token", token, {
         // httpOnly: true,
+        domain: "https://beehubvas.com",
         secure: true, // Set to true if your application is served over HTTPS
-        sameSite: "None",
+        sameSite: "lax",
         maxAge: 86400000,
       });
 
@@ -172,9 +173,10 @@ app.post("/login", async (req, res) => {
 
 app.post("/logout", async (req, res) => {
   res.clearCookie('token', {
+    domain: "https://beehubvas.com",
     path: '/', // Path should match the original cookie setting
     secure: true, // Set to true if the cookie was set with the secure flag
-    sameSite: 'None' // Set to 'None' if the cookie was set with SameSite=None
+    sameSite: 'lax' // Set to 'None' if the cookie was set with SameSite=None
   });
 
   res.send('Token cookie deleted'); 
