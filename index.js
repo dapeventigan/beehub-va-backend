@@ -155,7 +155,7 @@ app.post("/login", async (req, res) => {
         httpOnly: true,
         domain: "dape-beehub-va-api.onrender.com",
         secure: true, // Set to true if your application is served over HTTPS
-        sameSite: "stict",
+        sameSite: "strict",
         maxAge: 86400000,
       });
 
@@ -177,7 +177,7 @@ app.post("/logout", async (req, res) => {
     path: "/", // Path should match the original cookie setting
     secure: true, // Set to true if the cookie was set with the secure flag
     httpOnly: true,
-    sameSite: "stict", // Set to 'None' if the cookie was set with SameSite=None
+    sameSite: "strict", // Set to 'None' if the cookie was set with SameSite=None
   });
 
   res.clearCookie("token");
