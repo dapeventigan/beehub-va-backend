@@ -151,17 +151,18 @@ app.post("/login", async (req, res) => {
         }
       );
 
-      res.cookie("token", token, {
-        // httpOnly: true,
-        domain: "dape-beehub-va-api.onrender.com",
-        secure: true, // Set to true if your application is served over HTTPS
-        sameSite: "none",
-        maxAge: 86400000,
-      });
+      // res.cookie("token", token, {
+      //   // httpOnly: true,
+      //   domain: "dape-beehub-va-api.onrender.com",
+      //   secure: true, // Set to true if your application is served over HTTPS
+      //   sameSite: "none",
+      //   maxAge: 86400000,
+      // });
 
       res.cookie("token-legacy", token, {
         // httpOnly: true,
         domain: "dape-beehub-va-api.onrender.com",
+        secure: true,
         sameSite: 'lax',
         maxAge: 86400000,
       });
@@ -179,17 +180,18 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/logout", async (req, res) => {
-  res.clearCookie('token', {
-    domain: "dape-beehub-va-api.onrender.com",
-    path: '/', // Path should match the original cookie setting
-    secure: true, // Set to true if the cookie was set with the secure flag
-    // httpOnly: true,
-    sameSite: 'none' // Set to 'None' if the cookie was set with SameSite=None
-  });
+  // res.clearCookie('token', {
+  //   domain: "dape-beehub-va-api.onrender.com",
+  //   path: '/', // Path should match the original cookie setting
+  //   secure: true, // Set to true if the cookie was set with the secure flag
+  //   // httpOnly: true,
+  //   sameSite: 'none' // Set to 'None' if the cookie was set with SameSite=None
+  // });
 
   res.clearCookie('token-legacy', {
     domain: "dape-beehub-va-api.onrender.com",
     path: '/', // Path should match the original cookie setting
+    secure: true,
     sameSite: 'lax'
   });
 
