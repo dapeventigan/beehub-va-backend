@@ -152,7 +152,7 @@ app.post("/login", async (req, res) => {
       );
 
       res.cookie("token", token, {
-        // httpOnly: true,
+        httpOnly: true,
         secure: true, // Set to true if your application is served over HTTPS
         sameSite: "lax",
         maxAge: 86400000,
@@ -174,6 +174,7 @@ app.post("/logout", async (req, res) => {
   res.clearCookie('token', {
     path: '/', // Path should match the original cookie setting
     secure: true, // Set to true if the cookie was set with the secure flag
+    httpOnly: true,
     sameSite: 'lax' // Set to 'None' if the cookie was set with SameSite=None
   });
 
