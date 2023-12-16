@@ -159,14 +159,16 @@ app.post("/login", async (req, res) => {
       //   maxAge: 86400000,
       // });
 
-      res.cookie("token-legacy", token, {
-        // httpOnly: true,
-        domain: "dape-beehub-va-api.onrender.com",
-        httpOnly: true,
-        secure: true,
-        sameSite: "Lax",
-        maxAge: 86400000,
-      });
+      // res.cookie("token-legacy", token, {
+      //   // httpOnly: true,
+      //   domain: "dape-beehub-va-api.onrender.com",
+      //   httpOnly: true,
+      //   secure: true,
+      //   sameSite: "Lax",
+      //   maxAge: 86400000,
+      // });
+
+      res.cookie("token", token);
 
       if (res.status(201)) {
         return res.json({ status: "ok", role: user.role, userID: user._id });
@@ -189,13 +191,15 @@ app.post("/logout", async (req, res) => {
   //   sameSite: 'none' // Set to 'None' if the cookie was set with SameSite=None
   // });
 
-  res.clearCookie("token-legacy", {
-    domain: "dape-beehub-va-api.onrender.com",
-    path: "/", // Path should match the original cookie setting
-    httpOnly: true,
-    secure: true,
-    sameSite: "Lax",
-  });
+  // res.clearCookie("token-legacy", {
+  //   domain: "dape-beehub-va-api.onrender.com",
+  //   path: "/", // Path should match the original cookie setting
+  //   httpOnly: true,
+  //   secure: true,
+  //   sameSite: "Lax",
+  // });
+
+  res.clearCookie("token");
 
   res.send("Token cookie deleted");
 });
