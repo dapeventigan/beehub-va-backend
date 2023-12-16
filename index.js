@@ -174,10 +174,10 @@ app.post("/logout", async (req, res) => {
   res.clearCookie("token", {
     secure: true,
     httpOnly: true,
-    domain: "https://dape-beehub-va-api.onrender.com",
+    domain: "dape-beehub-va-api.onrender.com",
     path: "/",
   });
-  return res.redirect("/verifylogin");
+  res.send('Cookie cleared');
 });
 
 app.post("/getEmail", async (req, res) => {
