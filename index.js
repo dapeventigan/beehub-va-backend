@@ -143,23 +143,25 @@ app.post("/login", async (req, res) => {
         message: `An verification link was sent to ${req.body.email}. Please verify your account.`,
       });
     } else {
-      const token = jwt.sign(
-        { email: user.email, role: user.role, userID: user._id },
-        process.env.JWT_SECRET,
-        {
-          expiresIn: "1d",
-        }
-      );
+      // const token = jwt.sign(
+      //   { email: user.email, role: user.role, userID: user._id },
+      //   process.env.JWT_SECRET,
+      //   {
+      //     expiresIn: "1d",
+      //   }
+      // );
 
-      res.cookie("token", token, {
-        httpOnly: true,
-        domain: "dape-beehub-va-api.onrender.com",
-        // secure: true, // Set to true if your application is served over HTTPS
-        // sameSite: "none",
-        path: "/",
-        sameSite: "Lax",
-        maxAge: 86400000,
-      });
+      // res.cookie("token", token, {
+      //   httpOnly: true,
+      //   domain: "dape-beehub-va-api.onrender.com",
+      //   // secure: true, // Set to true if your application is served over HTTPS
+      //   // sameSite: "none",
+      //   path: "/",
+      //   sameSite: "Lax",
+      //   maxAge: 86400000,
+      // });
+
+      res.redirect("/");
 
       if (res.status(201)) {
         return res.json({ status: "ok", role: user.role, userID: user._id });
@@ -228,6 +230,29 @@ app.post("/contactMessage", async (req, res) => {
 });
 
 //GET
+
+app.get("/", async (req, res) => {
+  const token = jwt.sign(
+    { email: user.email, role: user.role, userID: user._id },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "1d",
+    }
+  );
+
+  res.cookie("token", token, {
+    httpOnly: true,
+    domain: "dape-beehub-va-api.onrender.com",
+    // secure: true, // Set to true if your application is served over HTTPS
+    // sameSite: "none",
+    path: "/",
+    sameSite: "Lax",
+    maxAge: 86400000,
+  });
+
+  res.send("Cookie is set to Lax and Successful");
+  console.log("Cookie is set to Lax and Successful");
+});
 
 app.get("/verify/:id/:token", async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
