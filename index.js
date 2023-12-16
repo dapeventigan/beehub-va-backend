@@ -17,7 +17,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: ["https://beehubvas.com", "http://localhost:3000"],
+    origin: "https://beehubvas.com",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: "Content-Type,Authorization",
     credentials: true,
@@ -151,23 +151,20 @@ app.post("/login", async (req, res) => {
         }
       );
 
-      // res.cookie("token", token, {
-      //   httpOnly: true,
-      //   domain: "dape-beehub-va-api.onrender.com",
-      //   // secure: true, // Set to true if your application is served over HTTPS
-      //   // sameSite: "none",
-      //   path: "/",
-      //   sameSite: "Lax",
-      //   maxAge: 86400000,
-      // });
+      res.cookie("token", token, {
+        // httpOnly: true,
+        domain: "dape-beehub-va-api.onrender.com",
+        // secure: true, // Set to true if your application is served over HTTPS
+        // sameSite: "none",
+        path: "/",
+        sameSite: "Lax",
+        maxAge: 86400000,
+      });
 
       if (res.status(201)) {
         return res.json({
           status: "ok",
           role: user.role,
-          userID: user._id,
-          email: email,
-          token: token,
         });
       } else {
         return res.json({ status: "error" });
@@ -234,34 +231,6 @@ app.post("/contactMessage", async (req, res) => {
 });
 
 //GET
-
-app.get("/setCookie", async (req, res) => {
-  const email = req.query.email;
-  const role = req.query.role;
-  const userID = req.query.userID;
-
-  console.log(email, role, userID);
-  const token = jwt.sign(
-    { email: email, role: role, userID: userID },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "1d",
-    }
-  );
-
-  res.cookie("token", token, {
-    httpOnly: true,
-    domain: "dape-beehub-va-api.onrender.com",
-    // secure: true, // Set to true if your application is served over HTTPS
-    // sameSite: "none",
-    path: "/",
-    sameSite: "Lax",
-    maxAge: 86400000,
-  });
-
-  res.send("Cookie is set to Lax and Successful");
-  console.log("Cookie is set to Lax and Successful");
-});
 
 app.get("/verify/:id/:token", async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
