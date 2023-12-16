@@ -17,7 +17,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://beehubvas.com",
+    origin: ["https://beehubvas.com", "http://localhost:3000"],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: "Content-Type,Authorization",
     credentials: true,
@@ -161,10 +161,13 @@ app.post("/login", async (req, res) => {
       //   maxAge: 86400000,
       // });
 
-      res.redirect("/");
-
       if (res.status(201)) {
-        return res.json({ status: "ok", role: user.role, userID: user._id });
+        return res.json({
+          status: "ok",
+          role: user.role,
+          userID: user._id,
+          email: email,
+        });
       } else {
         return res.json({ status: "error" });
       }
@@ -231,9 +234,14 @@ app.post("/contactMessage", async (req, res) => {
 
 //GET
 
-app.get("/", async (req, res) => {
+app.get("/setCookie", async (req, res) => {
+  const email = req.query.email;
+  const role = req.query.role;
+  const userID = req.query.userID;
+
+  console.log(email, role, userID);
   const token = jwt.sign(
-    { email: user.email, role: user.role, userID: user._id },
+    { email: email, role: role, userID: userID },
     process.env.JWT_SECRET,
     {
       expiresIn: "1d",
