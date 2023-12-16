@@ -143,13 +143,13 @@ app.post("/login", async (req, res) => {
         message: `An verification link was sent to ${req.body.email}. Please verify your account.`,
       });
     } else {
-      // const token = jwt.sign(
-      //   { email: user.email, role: user.role, userID: user._id },
-      //   process.env.JWT_SECRET,
-      //   {
-      //     expiresIn: "1d",
-      //   }
-      // );
+      const token = jwt.sign(
+        { email: user.email, role: user.role, userID: user._id },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "1d",
+        }
+      );
 
       // res.cookie("token", token, {
       //   httpOnly: true,
@@ -167,6 +167,7 @@ app.post("/login", async (req, res) => {
           role: user.role,
           userID: user._id,
           email: email,
+          token: token,
         });
       } else {
         return res.json({ status: "error" });
