@@ -259,11 +259,7 @@ app.get("/getCookieData", (req, res) => {
     const myCookie = req.cookies.token;
     console.log("Cookie Value:", myCookie);
     // Cookies that have not been signed
-    console.log("Cookies: ", req.cookies);
-
-    // Cookies that have been signed
-    console.log("Signed Cookies: ", req.signedCookies);
-    // Process the cookie value or send it back to the client as needed
+    console.log("req.headers.cookie: ", req.headers.cookie);
     res.json({ cookieValue: myCookie });
   } catch (error) {
     console.log("this is error: " + error);
