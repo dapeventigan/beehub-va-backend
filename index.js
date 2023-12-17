@@ -33,15 +33,15 @@ app.use(
 
 app.use((req, res, next) => {
   const allowedOrigins = [
-    'https://beehubvas.com',
-    'https://dape-beehub-va.onrender.com',
-    'https://dape-beehub-va-api.onrender.com',
-    'http://localhost:3000'
+    "https://beehubvas.com",
+    "https://dape-beehub-va.onrender.com",
+    "https://dape-beehub-va-api.onrender.com",
+    "http://localhost:3000",
   ];
   const origin = req.headers.origin;
 
   if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader("Access-Control-Allow-Origin", origin);
   }
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
@@ -255,15 +255,19 @@ app.post("/contactMessage", async (req, res) => {
 //GET
 
 app.get("/getCookieData", (req, res) => {
-  const myCookie = req.cookies.token;
-  console.log("Cookie Value:", myCookie);
-  // Cookies that have not been signed
-  console.log("Cookies: ", req.cookies);
+  try {
+    const myCookie = req.cookies.token;
+    console.log("Cookie Value:", myCookie);
+    // Cookies that have not been signed
+    console.log("Cookies: ", req.cookies);
 
-  // Cookies that have been signed
-  console.log("Signed Cookies: ", req.signedCookies);
-  // Process the cookie value or send it back to the client as needed
-  res.json({ cookieValue: myCookie });
+    // Cookies that have been signed
+    console.log("Signed Cookies: ", req.signedCookies);
+    // Process the cookie value or send it back to the client as needed
+    res.json({ cookieValue: myCookie });
+  } catch (error) {
+    console.log("this is error: " + error);
+  }
 });
 
 app.get("/verify/:id/:token", async (req, res) => {
