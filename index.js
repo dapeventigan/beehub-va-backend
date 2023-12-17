@@ -32,10 +32,17 @@ app.use(
 
 app.use(cookieParser());
 app.use((req, res, next) => {
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://beehubvas.com, https://dape-beehub-va.onrender.com, https://dape-beehub-va-api.onrender.com, http://localhost:3000 "
-  );
+  const allowedOrigins = [
+    "https://beehubvas.com",
+    "https://dape-beehub-va.onrender.com",
+    "https://dape-beehub-va-api.onrender.com",
+    "http://localhost:3000",
+  ];
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.setHeader("Access-Control-Allow-Credentials", "true");
