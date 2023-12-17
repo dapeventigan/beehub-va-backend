@@ -255,6 +255,14 @@ app.post("/contactMessage", async (req, res) => {
 //GET
 
 app.get("/getCookieData", (req, res) => {
+        res.cookie("token", token, {
+        httpOnly: true,
+        // domain: "dape-beehub-va-api.onrender.com",
+        secure: true, // Set to true if your application is served over HTTPS
+        sameSite: "none",
+        path: "/",
+      });
+
   try {
     const myCookie = req.cookies.token;
     console.log("Cookie Value:", myCookie);
