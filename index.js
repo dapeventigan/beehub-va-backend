@@ -247,7 +247,7 @@ app.post("/contactMessage", async (req, res) => {
 
 app.get('/getCookieData', (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
-  const myCookie = req.cookies.token;
+  const myCookie = req.cookies;
   console.log('Cookie Value:', myCookie);
   // Process the cookie value or send it back to the client as needed
   res.json({ cookieValue: myCookie });
