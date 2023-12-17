@@ -17,7 +17,12 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: ["https://beehubvas.com","https://dape-beehub-va.onrender.com","https://dape-beehub-va-api.onrender.com","http://localhost:3000"],
+    origin: [
+      "https://beehubvas.com",
+      "https://dape-beehub-va.onrender.com",
+      "https://dape-beehub-va-api.onrender.com",
+      "http://localhost:3000",
+    ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: "Content-Type,Authorization",
     credentials: true,
@@ -50,6 +55,7 @@ const VerifyUserModel = require("./models/verifyUserSchema");
 
 //MULTER
 const multer = require("multer");
+const { log } = require("console");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "./resumes");
@@ -171,7 +177,7 @@ app.post("/login", async (req, res) => {
         return res.json({
           status: "ok",
           role: user.role,
-          token:token,
+          token: token,
         });
       } else {
         return res.json({ status: "error" });
@@ -285,6 +291,7 @@ app.get("/reset/:id/:token", async (req, res) => {
 const verifyLoginUser = (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
   const token = req.cookies.token;
+  console.log(token);
   if (!token) {
     const tokenkey = "No token found";
     req.tokenkey = tokenkey;
@@ -316,7 +323,7 @@ app.get("/verifylogin", verifyLoginUser, (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
   const user = req.user;
   const tokenVerify = req.tokenkey;
-
+  console.log(tokenVerify);
   if (tokenVerify == "No token found") {
     res.json("User not found");
   } else {
