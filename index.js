@@ -174,14 +174,14 @@ app.post("/login", async (req, res) => {
         }
       );
 
-      res.cookie("token2", token, {
-        httpOnly: true,
-        // domain: "dape-beehub-va-api.onrender.com",
-        secure: true, // Set to true if your application is served over HTTPS
-        sameSite: "none",
-        path: "/",
-        maxAge: 86400000,
-      });
+      // res.cookie("token", token, {
+      //   httpOnly: true,
+      //   // domain: "dape-beehub-va-api.onrender.com",
+      //   secure: true, // Set to true if your application is served over HTTPS
+      //   sameSite: "none",
+      //   path: "/",
+      //   maxAge: 86400000,
+      // });
 
       if (res.status(201)) {
         return res.json({
@@ -258,7 +258,7 @@ app.get("/getCookieData", (req, res) => {
   const myCookie = req.cookies.token;
   console.log("Cookie Value:", myCookie);
   // Cookies that have not been signed
-  console.log("req.headers.cookie: ", req.headers.cookie);
+  console.log('All Cookies:', req.cookies);
   res.json({ cookieValue: myCookie });
 });
 
