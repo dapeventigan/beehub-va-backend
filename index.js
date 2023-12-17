@@ -31,17 +31,17 @@ app.use(
   })
 );
 
-
 app.use((req, res, next) => {
   const allowedOrigins = [
-    "https://dape-beehub-va.onrender.com",
-    "https://dape-beehub-va-api.onrender.com",
-    "http://localhost:3000",
+    'https://beehubvas.com',
+    'https://dape-beehub-va.onrender.com',
+    'https://dape-beehub-va-api.onrender.com',
+    'http://localhost:3000'
   ];
   const origin = req.headers.origin;
 
   if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader('Access-Control-Allow-Origin', origin);
   }
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
@@ -214,7 +214,6 @@ app.post("/logout", async (req, res) => {
 });
 
 app.post("/getEmail", async (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
   let user = await UserModel.findOne({ email: req.body.email });
   if (user) {
     const userVerify = await new VerifyUserModel({
@@ -256,20 +255,18 @@ app.post("/contactMessage", async (req, res) => {
 //GET
 
 app.get("/getCookieData", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
   const myCookie = req.cookies.token;
   console.log("Cookie Value:", myCookie);
-    // Cookies that have not been signed
-    console.log('Cookies: ', req.cookies)
+  // Cookies that have not been signed
+  console.log("Cookies: ", req.cookies);
 
-    // Cookies that have been signed
-    console.log('Signed Cookies: ', req.signedCookies)
+  // Cookies that have been signed
+  console.log("Signed Cookies: ", req.signedCookies);
   // Process the cookie value or send it back to the client as needed
   res.json({ cookieValue: myCookie });
 });
 
 app.get("/verify/:id/:token", async (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
   const userId = await VerifyUserModel.findOne({ userId: req.params.id });
 
   if (!userId) {
@@ -312,7 +309,6 @@ app.get("/reset/:id/:token", async (req, res) => {
 });
 
 const verifyLoginUser = (req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
   const token = req.cookies.token;
   if (!token) {
     const tokenkey = "No token found";
@@ -342,7 +338,6 @@ const verifyLoginUser = (req, res, next) => {
 };
 
 app.get("/verifylogin", verifyLoginUser, (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
   const user = req.user;
   const tokenVerify = req.tokenkey;
   if (tokenVerify == "No token found") {
