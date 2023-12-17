@@ -245,6 +245,13 @@ app.post("/contactMessage", async (req, res) => {
 
 //GET
 
+app.get('/getCookieData', (req, res) => {
+  const myCookie = req.cookies.token;
+  console.log('Cookie Value:', myCookie);
+  // Process the cookie value or send it back to the client as needed
+  res.json({ cookieValue: myCookie });
+});
+
 app.get("/verify/:id/:token", async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
   const userId = await VerifyUserModel.findOne({ userId: req.params.id });
