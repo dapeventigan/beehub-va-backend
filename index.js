@@ -33,7 +33,6 @@ app.use(
 app.use(cookieParser());
 app.use((req, res, next) => {
   const allowedOrigins = [
-    "https://beehubvas.com",
     "https://dape-beehub-va.onrender.com",
     "https://dape-beehub-va-api.onrender.com",
     "http://localhost:3000",
