@@ -32,7 +32,10 @@ app.use(
 
 app.use(cookieParser());
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://beehubvas.com, https://dape-beehub-va.onrender.com, https://dape-beehub-va-api.onrender.com, http://localhost:3000 "
+  );
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -245,10 +248,10 @@ app.post("/contactMessage", async (req, res) => {
 
 //GET
 
-app.get('/getCookieData', (req, res) => {
+app.get("/getCookieData", (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
   const myCookie = req.cookies.token;
-  console.log('Cookie Value:', myCookie);
+  console.log("Cookie Value:", myCookie);
   // Process the cookie value or send it back to the client as needed
   res.json({ cookieValue: myCookie });
 });
