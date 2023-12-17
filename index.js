@@ -176,7 +176,6 @@ app.post("/login", async (req, res) => {
 
       res.cookie("token", token, {
         httpOnly: true,
-        domain: "beehubvas.com",
         secure: true, // Set to true if your application is served over HTTPS
         sameSite: 'None',
         maxAge: 24 * 60 * 60 * 1000,
