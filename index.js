@@ -178,9 +178,8 @@ app.post("/login", async (req, res) => {
         httpOnly: true,
         // domain: "dape-beehub-va-api.onrender.com",
         secure: true, // Set to true if your application is served over HTTPS
-        sameSite: "None",
-        path: "/",
-        maxAge: 86400000,
+        sameSite: 'None',
+        maxAge: 24 * 60 * 60 * 1000,
       });
 
       if (res.status(201)) {
