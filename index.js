@@ -14,6 +14,7 @@ require("dotenv").config();
 
 //middlewares
 const app = express();
+app.use(cookieParser());
 app.use(express.json());
 app.use(
   cors({
@@ -30,7 +31,7 @@ app.use(
   })
 );
 
-app.use(cookieParser());
+
 app.use((req, res, next) => {
   const allowedOrigins = [
     "https://dape-beehub-va.onrender.com",
@@ -258,6 +259,11 @@ app.get("/getCookieData", (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
   const myCookie = req.cookies.token;
   console.log("Cookie Value:", myCookie);
+    // Cookies that have not been signed
+    console.log('Cookies: ', req.cookies)
+
+    // Cookies that have been signed
+    console.log('Signed Cookies: ', req.signedCookies)
   // Process the cookie value or send it back to the client as needed
   res.json({ cookieValue: myCookie });
 });
