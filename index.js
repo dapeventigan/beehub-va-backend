@@ -299,7 +299,6 @@ app.get("/reset/:id/:token", async (req, res) => {
 const verifyLoginUser = (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
   const token = req.cookies.token;
-  console.log("asdasd" + token);
   if (!token) {
     const tokenkey = "No token found";
     req.tokenkey = tokenkey;
@@ -331,7 +330,6 @@ app.get("/verifylogin", verifyLoginUser, (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
   const user = req.user;
   const tokenVerify = req.tokenkey;
-  console.log("asdh" + tokenVerify);
   if (tokenVerify == "No token found") {
     res.json("User not found");
   } else {
