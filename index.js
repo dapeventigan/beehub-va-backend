@@ -154,7 +154,7 @@ app.post("/login", async (req, res) => {
       res.cookie("token", token, {
         httpOnly: true,
         domain: "dape-beehub-va-api.onrender.com",
-        secure: false, // Set to true if your application is served over HTTPS
+        secure: true, // Set to true if your application is served over HTTPS
         sameSite: "none",
         path: "/",
         maxAge: 86400000,
