@@ -30,22 +30,15 @@ const io = new Server(server, {
 });
 app.use(cookieParser());
 app.use(express.json());
-// app.use(
-//   cors({
-//     origin: [
-//       "https://beehubvas.com",
-//       "https://dape-beehub-va.onrender.com",
-//       "https://dape-beehub-va-api.onrender.com",
-//       "http://localhost:3000",
-//     ],
-//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-//     allowedHeaders: "Content-Type,Authorization",
-//     credentials: true,
-//     optionsSuccessStatus: 200,
-//   })
-// );
-
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://beehubvas.com",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: "Content-Type,Authorization",
+    credentials: true,
+    optionsSuccessStatus: 200,
+  })
+);
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
