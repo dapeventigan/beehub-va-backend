@@ -50,7 +50,6 @@ app.use(
   })
 );
 
-
 app.use((req, res, next) => {
   const allowedOrigins = [
     "https://beehubvas.com",
@@ -192,15 +191,15 @@ const upload = multer({ storage: storage });
 // });
 
 io.on("connection", (socket) => {
+  res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
   socket.on("new_user", (data) => {
-    socket.broadcast.emit("senduser_admin", data)
-  })
+    socket.broadcast.emit("senduser_admin", data);
+  });
 });
 
 app.post("/applyRegister", upload.single("pdfFile"), async (req, res) => {
   const fileName = req.file.filename;
   const roleStatus = "applyUser";
-
 
   let user = await UserModel.findOne({
     email: req.body.email,
