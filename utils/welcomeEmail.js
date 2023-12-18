@@ -10,7 +10,7 @@ const oAuth2Client = new google.auth.OAuth2(
 
 oAuth2Client.setCredentials({ refresh_token: process.env.GMAIL_REFRESHTOKEN });
 
-module.exports = async (email, fname, applied) => {
+module.exports = async (email, fname, applied,filename) => {
   try {
     const ACCESS_TOKEN = await oAuth2Client.getAccessToken();
     const transporter = nodemailer.createTransport({
@@ -230,6 +230,13 @@ module.exports = async (email, fname, applied) => {
       to: email,
       subject: "Welcome to Beehub Virtual Assistance Co.",
       html: htmlContent,
+      attachments: [
+        {
+          filename: `${filename}`,
+          path: `./resumes/${filename}`,
+          contentType: 'application/pdf',
+        },
+      ],
     });
     console.log("email sent successfully");
   } catch (error) {

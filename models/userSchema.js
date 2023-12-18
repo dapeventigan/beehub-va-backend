@@ -13,6 +13,7 @@ const UserSchema = new mongoose.Schema({
   email: String,
   password: String,
   selectedValues: Object,
+  skills: Object,
   role: String,
   archive: { type: Boolean, default: false },
   verified: { type: Boolean, default: false },

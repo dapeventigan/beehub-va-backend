@@ -6,6 +6,8 @@ const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 const crypto = require("crypto");
 const path = require("path"); // Import the 'path' module
+const http = require("http");
+const { Server } = require("socket.io");
 //utils
 const verifyEmail = require("./utils/verifyEmail");
 const resetPassword = require("./utils/resetPassword");
@@ -16,6 +18,21 @@ require("dotenv").config();
 
 //middlewares
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: [
+      "https://beehubvas.com",
+      "https://dape-beehub-va.onrender.com",
+      "https://dape-beehub-va-api.onrender.com",
+      "http://localhost:3000",
+    ],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: "Content-Type,Authorization",
+    credentials: true,
+    optionsSuccessStatus: 200,
+  },
+});
 app.use(cookieParser());
 app.use(express.json());
 app.use(
@@ -57,7 +74,7 @@ mongoose.connect(process.env.DB, {
 });
 
 const port = process.env.PORT || 3001;
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
 
@@ -67,7 +84,6 @@ const VerifyUserModel = require("./models/verifyUserSchema");
 
 //MULTER
 const multer = require("multer");
-const { log } = require("console");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "./resumes");
@@ -142,11 +158,53 @@ const upload = multer({ storage: storage });
 //   });
 // });
 
+// app.post("/joinRegister", upload.single("pdfFile"), async (req, res) => {
+//   const password = "OFWGKTA02!";
+//   const roleStatus = "joinUser";
+//   const encryptedPassword = await bcrypt.hash(password, 10);
+//   console.log(encryptedPassword)
+
+//   let user = await UserModel.findOne({
+//     email: req.body.email,
+//     contacted: false,
+//   });
+//   if (user) {
+//     res.send({ message: "Email Already Exist!" });
+//     const roleStatus = "";
+//   } else {
+//     user = await new UserModel({
+//       ...req.body,
+//       role: roleStatus,
+//     }).save();
+
+//     // await welcomeJoinEmail(
+//     //   req.body.email,
+//     //   req.body.fname,
+//     //   req.body.selectedValues
+//     // );
+
+//     res.status(200).send({
+//       message: "Email sent, check your mail.",
+//       user: user,
+//     });
+//   }
+// });
+
+io.on("connection", (socket) => {
+  socket.on("new_user", (data) => {
+    socket.broadcast.emit("senduser_admin", data)
+  })
+});
+
 app.post("/applyRegister", upload.single("pdfFile"), async (req, res) => {
   const fileName = req.file.filename;
   const roleStatus = "applyUser";
 
-  let user = await UserModel.findOne({ email: req.body.email, contacted: false });
+
+  let user = await UserModel.findOne({
+    email: req.body.email,
+    contacted: false,
+  });
 
   if (user) {
     res.send({ message: "Email Already Exist!" });
@@ -159,7 +217,12 @@ app.post("/applyRegister", upload.single("pdfFile"), async (req, res) => {
       role: roleStatus,
     }).save();
 
-    await welcomeEmail(req.body.email, req.body.fname, req.body.selectedValues);
+    await welcomeEmail(
+      req.body.email,
+      req.body.fname,
+      req.body.selectedValues,
+      fileName
+    );
 
     res.status(200).send({
       message: "Email sent, check your mail.",
@@ -169,10 +232,12 @@ app.post("/applyRegister", upload.single("pdfFile"), async (req, res) => {
 });
 
 app.post("/joinRegister", upload.single("pdfFile"), async (req, res) => {
-  const password = req.body.password;
   const roleStatus = "joinUser";
 
-  let user = await UserModel.findOne({ email: req.body.email, contacted: false });
+  let user = await UserModel.findOne({
+    email: req.body.email,
+    contacted: false,
+  });
   if (user) {
     res.send({ message: "Email Already Exist!" });
     const roleStatus = "";
@@ -182,13 +247,16 @@ app.post("/joinRegister", upload.single("pdfFile"), async (req, res) => {
       role: roleStatus,
     }).save();
 
-    await welcomeJoinEmail(req.body.email, req.body.fname, req.body.selectedValues);
+    await welcomeJoinEmail(
+      req.body.email,
+      req.body.fname,
+      req.body.selectedValues
+    );
 
     res.status(200).send({
       message: "Email sent, check your mail.",
       user: user,
     });
-
   }
 });
 
