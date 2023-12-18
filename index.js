@@ -21,12 +21,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: [
-      "https://beehubvas.com",
-      "https://dape-beehub-va.onrender.com",
-      "https://dape-beehub-va-api.onrender.com",
-      "http://localhost:3000",
-    ],
+    origin: "https://beehubvas.com",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: "Content-Type,Authorization",
     credentials: true,
@@ -35,20 +30,22 @@ const io = new Server(server, {
 });
 app.use(cookieParser());
 app.use(express.json());
-app.use(
-  cors({
-    origin: [
-      "https://beehubvas.com",
-      "https://dape-beehub-va.onrender.com",
-      "https://dape-beehub-va-api.onrender.com",
-      "http://localhost:3000",
-    ],
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    allowedHeaders: "Content-Type,Authorization",
-    credentials: true,
-    optionsSuccessStatus: 200,
-  })
-);
+// app.use(
+//   cors({
+//     origin: [
+//       "https://beehubvas.com",
+//       "https://dape-beehub-va.onrender.com",
+//       "https://dape-beehub-va-api.onrender.com",
+//       "http://localhost:3000",
+//     ],
+//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+//     allowedHeaders: "Content-Type,Authorization",
+//     credentials: true,
+//     optionsSuccessStatus: 200,
+//   })
+// );
+
+app.use(cors());
 
 app.use((req, res, next) => {
   const allowedOrigins = [
@@ -191,7 +188,6 @@ const upload = multer({ storage: storage });
 // });
 
 io.on("connection", (socket) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://beehubvas.com");
   socket.on("new_user", (data) => {
     socket.broadcast.emit("senduser_admin", data);
   });
