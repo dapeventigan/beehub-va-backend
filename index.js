@@ -10,6 +10,8 @@ const path = require("path"); // Import the 'path' module
 const verifyEmail = require("./utils/verifyEmail");
 const resetPassword = require("./utils/resetPassword");
 const contactEmail = require("./utils/contactEmail");
+const welcomeEmail = require("./utils/welcomeEmail");
+const welcomeJoinEmail = require("./utils/welcomeJoinEmail");
 require("dotenv").config();
 
 //middlewares
@@ -80,64 +82,114 @@ const upload = multer({ storage: storage });
 
 //POST
 
+// app.post("/applyRegister", upload.single("pdfFile"), async (req, res) => {
+//   const fileName = req.file.filename;
+//   const password = req.body.password;
+//   const roleStatus = "applyUser";
+//   const encryptedPassword = await bcrypt.hash(password, 10);
+
+//   let user = await UserModel.findOne({ email: req.body.email });
+//   if (user) {
+//     return res.send("Email Already Exist!");
+//   }
+
+//   user = await new UserModel({
+//     ...req.body,
+//     pdfFile: fileName,
+//     role: roleStatus,
+//     password: encryptedPassword,
+//   }).save();
+
+//   const userVerify = await new VerifyUserModel({
+//     userId: user._id,
+//     uniqueString: crypto.randomBytes(32).toString("hex"),
+//   }).save();
+//   const urlVerify = `https://beehubvas.com/verify/${user._id}/${userVerify.uniqueString}`;
+//   await verifyEmail(req.body.email, urlVerify);
+
+//   res.status(200).send({
+//     message: "Email sent, check your mail.",
+//     user: user,
+//   });
+// });
+
+// app.post("/joinRegister", upload.single("pdfFile"), async (req, res) => {
+//   const password = req.body.password;
+//   const roleStatus = "joinUser";
+//   const encryptedPassword = await bcrypt.hash(password, 10);
+
+//   let user = await UserModel.findOne({ email: req.body.email });
+//   if (user) {
+//     return res.send("Email Already Exist!");
+//   }
+
+//   user = await new UserModel({
+//     ...req.body,
+//     role: roleStatus,
+//     password: encryptedPassword,
+//   }).save();
+
+//   const userVerify = await new VerifyUserModel({
+//     userId: user._id,
+//     uniqueString: crypto.randomBytes(32).toString("hex"),
+//   }).save();
+//   const urlVerify = `https://beehubvas.com/verify/${user._id}/${userVerify.uniqueString}`;
+//   await verifyEmail(req.body.email, urlVerify);
+
+//   res.status(200).send({
+//     message: "Email sent, check your mail.",
+//     user: user,
+//   });
+// });
+
 app.post("/applyRegister", upload.single("pdfFile"), async (req, res) => {
   const fileName = req.file.filename;
-  const password = req.body.password;
   const roleStatus = "applyUser";
-  const encryptedPassword = await bcrypt.hash(password, 10);
 
-  let user = await UserModel.findOne({ email: req.body.email });
+  let user = await UserModel.findOne({ email: req.body.email, contacted: false });
+
   if (user) {
-    return res.send("Email Already Exist!");
+    res.send({ message: "Email Already Exist!" });
+    const fileName = null;
+    const roleStatus = "";
+  } else {
+    user = await new UserModel({
+      ...req.body,
+      pdfFile: fileName,
+      role: roleStatus,
+    }).save();
+
+    await welcomeEmail(req.body.email, req.body.fname, req.body.selectedValues);
+
+    res.status(200).send({
+      message: "Email sent, check your mail.",
+      user: user,
+    });
   }
-
-  user = await new UserModel({
-    ...req.body,
-    pdfFile: fileName,
-    role: roleStatus,
-    password: encryptedPassword,
-  }).save();
-
-  const userVerify = await new VerifyUserModel({
-    userId: user._id,
-    uniqueString: crypto.randomBytes(32).toString("hex"),
-  }).save();
-  const urlVerify = `https://beehubvas.com/verify/${user._id}/${userVerify.uniqueString}`;
-  await verifyEmail(req.body.email, urlVerify);
-
-  res.status(200).send({
-    message: "Email sent, check your mail.",
-    user: user,
-  });
 });
 
 app.post("/joinRegister", upload.single("pdfFile"), async (req, res) => {
   const password = req.body.password;
   const roleStatus = "joinUser";
-  const encryptedPassword = await bcrypt.hash(password, 10);
 
-  let user = await UserModel.findOne({ email: req.body.email });
+  let user = await UserModel.findOne({ email: req.body.email, contacted: false });
   if (user) {
-    return res.send("Email Already Exist!");
+    res.send({ message: "Email Already Exist!" });
+    const roleStatus = "";
+  } else {
+    user = await new UserModel({
+      ...req.body,
+      role: roleStatus,
+    }).save();
+
+    await welcomeJoinEmail(req.body.email, req.body.fname, req.body.selectedValues);
+
+    res.status(200).send({
+      message: "Email sent, check your mail.",
+      user: user,
+    });
+
   }
-
-  user = await new UserModel({
-    ...req.body,
-    role: roleStatus,
-    password: encryptedPassword,
-  }).save();
-
-  const userVerify = await new VerifyUserModel({
-    userId: user._id,
-    uniqueString: crypto.randomBytes(32).toString("hex"),
-  }).save();
-  const urlVerify = `https://beehubvas.com/verify/${user._id}/${userVerify.uniqueString}`;
-  await verifyEmail(req.body.email, urlVerify);
-
-  res.status(200).send({
-    message: "Email sent, check your mail.",
-    user: user,
-  });
 });
 
 app.post("/login", async (req, res) => {
@@ -177,7 +229,7 @@ app.post("/login", async (req, res) => {
       res.cookie("token", token, {
         httpOnly: true,
         secure: true, // Set to true if your application is served over HTTPS
-        sameSite: 'None',
+        sameSite: "None",
         maxAge: 24 * 60 * 60 * 1000,
       });
 
@@ -251,15 +303,6 @@ app.post("/contactMessage", async (req, res) => {
 });
 
 //GET
-
-app.get("/getCookieData", (req, res) => {
-  const myCookie = req.cookies.token;
-  console.log("Cookie Value:", myCookie);
-  // Cookies that have not been signed
-  console.log('All Cookies:', req.cookies);
-  res.json({ cookieValue: myCookie });
-});
-
 app.get("/verify/:id/:token", async (req, res) => {
   const userId = await VerifyUserModel.findOne({ userId: req.params.id });
 

@@ -16,6 +16,7 @@ const UserSchema = new mongoose.Schema({
   role: String,
   archive: { type: Boolean, default: false },
   verified: { type: Boolean, default: false },
+  contacted: { type: Boolean, default: false },
 });
 
 const UserModel = mongoose.model("UserData", UserSchema);
